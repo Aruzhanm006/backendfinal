@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .          # project root (backendfinal/)
+      dockerfile: backend/Dockerfile
+    container_name: funding-aggregator
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      # Persist SQLite database between container restarts
+      - sqlite_data:/data
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: "file:/data/app.db"
+      FRONTEND_ROOT: "/app/public"
+      # JWT secret — change this in production!
+      JWT_SECRET: ${JWT_SECRET:-change_me_use_a_long_random_secret_here_32chars}
+      # SMTP — optional, uses Ethereal test account if empty
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-"Funding Aggregator <noreply@funding-aggregator.demo>"}
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/health').then(r=>r.ok?process.exit(0):process.exit(1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  sqlite_data:
+    driver: local

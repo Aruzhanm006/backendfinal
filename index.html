@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Funding Aggregator — платформа для поиска грантов, стипендий и конкурсов по всему миру." />
+    <title>Funding Aggregator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="header">
+      <div class="container header__inner">
+        <a class="brand" href="#/">
+          <span class="brand__logo" aria-hidden="true">FA</span>
+          <span class="brand__text">Funding Aggregator</span>
+        </a>
+
+        <nav class="nav" aria-label="Primary">
+          <a class="nav__link" data-nav href="#/grants"></a>
+          <a class="nav__link" data-nav href="#/scholarships"></a>
+          <a class="nav__link" data-nav href="#/competitions"></a>
+          <a class="nav__link" data-nav href="#/categories"></a>
+          <a class="nav__link" data-nav href="#/about"></a>
+          <a class="nav__link" data-nav href="#/contact"></a>
+        </nav>
+
+        <div class="header__actions">
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button class="chip" type="button" data-lang="kz">ҚАЗ</button>
+            <button class="chip" type="button" data-lang="ru">РУС</button>
+          </div>
+          <a class="btn btn--ghost btn--sm" href="#/login" data-auth-link></a>
+          <button class="btn btn--primary btn--sm" type="button" data-open-search></button>
+          <button class="icon-btn nav-toggle" type="button" aria-label="Menu" data-nav-toggle>
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="container">
+        <div class="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+      </div>
+      <div class="container" id="app"></div>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div class="footer__col">
+          <div class="footer__brandRow">
+            <span class="footer__icon" aria-hidden="true">FA</span>
+            <div class="footer__brand">Funding Aggregator</div>
+          </div>
+          <div class="footer__desc" data-i18n="footer.desc"></div>
+          <div class="footer__social">
+            <button class="footer__soc-btn">LinkedIn</button>
+            <button class="footer__soc-btn">Telegram</button>
+            <button class="footer__soc-btn">Instagram</button>
+          </div>
+        </div>
+
+        <div class="footer__col">
+          <div class="footer__title" data-i18n="footer.quickLinks"></div>
+          <a class="footer__link" href="#/grants" data-i18n="footer.links.grants"></a>
+          <a class="footer__link" href="#/scholarships" data-i18n="footer.links.scholarships"></a>
+          <a class="footer__link" href="#/competitions" data-i18n="footer.links.competitions"></a>
+          <a class="footer__link" href="#/categories" data-i18n="footer.links.categories"></a>
+        </div>
+
+        <div class="footer__col">
+          <div class="footer__title" data-i18n="footer.support"></div>
+          <a class="footer__link" href="#/about" data-i18n="footer.links.about"></a>
+          <a class="footer__link" href="#/contact" data-i18n="footer.links.contact"></a>
+          <a class="footer__link" href="#/faq" data-i18n="footer.links.faq"></a>
+          <a class="footer__link" href="#/privacy" data-i18n="footer.links.privacy"></a>
+          <a class="footer__link" href="#/favorites">❤️ <span data-i18n="auth.favoritesTitle"></span></a>
+          <a class="footer__link" href="#/notifications">🔔 <span data-i18n="notifications.title"></span></a>
+        </div>
+      </div>
+
+      <div class="container footer__bottom">
+        <div class="footer__divider" aria-hidden="true"></div>
+        <div class="footer__copyright">
+          © <span data-year></span> Funding Aggregator. <span data-i18n="footer.rights"></span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Search modal -->
+    <div class="modal" hidden data-modal>
+      <div class="modal__backdrop" data-close-modal></div>
+      <div class="modal__panel" role="dialog" aria-modal="true">
+        <div class="modal__header">
+          <div class="modal__title" data-i18n="search.title"></div>
+          <button class="icon-btn" type="button" aria-label="Close" data-close-modal>✕</button>
+        </div>
+        <div class="modal__body">
+          <div class="hero__search">
+            <input class="input" style="flex:1" type="search" data-search-input />
+            <button class="btn btn--primary" type="button" data-search-submit></button>
+          </div>
+          <div data-search-filters></div>
+          <div class="results" data-search-results></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

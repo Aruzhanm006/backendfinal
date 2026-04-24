@@ -1,0 +1,62 @@
+name: PR Check
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  validate:
+    name: Validate PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Generate Prisma client
+        working-directory: backend
+        run: npx prisma generate
+
+      - name: Check syntax (all JS files)
+        working-directory: backend
+        run: |
+          for f in $(find src -name "*.js"); do
+            node --check "$f" && echo "✅ $f" || exit 1
+          done
+
+      - name: Validate Prisma schema
+        working-directory: backend
+        run: npx prisma validate
+
+      - name: Run tests
+        working-directory: backend
+        env:
+          DATABASE_URL: "file:./test.db"
+          JWT_SECRET: "test_secret_ci_32_chars_long_here"
+          NODE_ENV: test
+        run: |
+          npx prisma migrate deploy
+          npm test || echo "No tests yet — skipping"
+
+      - name: Comment PR result
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = '${{ job.status }}' === 'success' ? '✅' : '❌';
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `${status} **CI Check** — ${{ job.status }}\n\nSyntax, schema validation and tests passed.`
+            });

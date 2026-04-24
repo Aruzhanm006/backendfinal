@@ -1,0 +1,22 @@
+version: '3.9'
+
+# Development override — mounts source code for live editing
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      target: deps          # stop at deps stage (faster rebuild)
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/prisma:/app/prisma
+      - ./index.html:/app/public/index.html
+      - ./app.js:/app/public/app.js
+      - ./styles.css:/app/public/styles.css
+      - sqlite_data:/data
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: "file:/data/dev.db"
+    command: ["sh", "-c", "npx prisma migrate deploy && npm run seed 2>/dev/null || true; node src/server.js"]

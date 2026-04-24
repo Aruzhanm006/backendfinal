@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'funding-aggregator'
+    static_configs:
+      - targets: ['app:3000']   # 'app' = service name in docker-compose
+    metrics_path: /metrics
+    scrape_interval: 15s
